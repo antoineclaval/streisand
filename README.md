@@ -7,6 +7,34 @@ Streisand
 
 The Internet can be a little unfair. It's way too easy for ISPs, telecoms, politicians, and corporations to block access to the sites and information that you care about. But breaking through these restrictions is *tough*. Or is it?
 
+Streisand NOLIME
+---------------------
+
+Custom Deploy 
+
+Error 1: 
+
+TASK [common : Install Streisand common packages] ******************************
+failed: [199.119.112.16] (item=[u'apparmor', u'apt-transport-https', u'build-essential', u'curl', u'expect', u'gnupg', u'iptables', u'markdown', u'ntp', u'python-pexpect', u'python-software-properties', u'qrencode', u'unattended-upgrades', u'wamerican-huge']) => {"failed": true, "item": ["apparmor", "apt-transport-https", "build-essential", "curl", "expect", "gnupg", "iptables", "markdown", "ntp", "python-pexpect", "python-software-properties", "qrencode", "unattended-upgrades", "wamerican-huge"], "msg": "No package matching 'expect' is available"}
+  to retry, use: --limit @/Users/dop/git/streisand/playbooks/streisand.retry
+
+echo "deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list 
+echo "deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list 
+
+Error 2: ip_tables kernel module is missing. ( check loaded module with lsmod )
+
+// up to cat /proc/version  4.4.0-60 and beyond. Anything with iptables, really. 
+sudo apt-get update
+sudo apt-get install linux-image-`uname -r`
+sudo apt-get install linux-headers-`uname -r`
+// insert hard reboot here
+apt-get upgrade 
+// I had to redo the whole thing again. Weird. keep an eye on those file:
+/lib/modules/4.4.0-66-generic/kernel/net/ipv4/netfilter/ip_tables.ko
+/lib/modules/4.4.0-62-generic/kernel/net/ipv4/netfilter/ip_tables.ko
+Ref : https://superuser.com/questions/813323/iptables-module-ip-tables-not-found-for-root
+
+
 Introducing Streisand
 ---------------------
 * A single command sets up a brand new Ubuntu 16.04 server running a [wide variety of anti-censorship software](#services-provided) that can completely mask and encrypt all of your Internet traffic.
